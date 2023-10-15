@@ -124,6 +124,21 @@ class WireguardVpnPlugin: FlutterPlugin, MethodCallHandler ,ActivityAware,Plugin
     }
 
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+        scope.launch(Dispatchers.IO) {
+            try {
+                // get running tunnels
+                val runningTunnels = futureBackend.await().runningTunnelNames
+                // stop all tunnels
+                runningTunnels.forEach {
+                    futureBackend.await().setState(tunnel(it), Tunnel.State.DOWN, null)
+                    Log.i(TAG, "Stopped tunnel $it")
+                }
+            } catch (e: Throwable) {
+                Log.e(TAG, Log.getStackTraceString(e))
+            }
+        }
+
+
         channel.setMethodCallHandler(null)
     }
 
