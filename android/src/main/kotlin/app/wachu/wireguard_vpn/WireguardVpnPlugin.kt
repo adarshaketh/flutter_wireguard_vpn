@@ -210,6 +210,7 @@ class WireguardVpnPlugin: FlutterPlugin, MethodCallHandler ,ActivityAware,Plugin
                             .parseListenPort(params.tunnel.listenPort)
                             .parseDnsServers(params.tunnel.dnsServer)
                             .parsePrivateKey(params.tunnel.privateKey)
+                            .parseExcludedApplications(params.bypassAppIds?.joinToString(",") ?: "")
                             .build(),
                     )
                     .addPeer(
@@ -313,7 +314,8 @@ class MyTunnel(private val name: String,
 
 class SetStateParams(
     val state: Boolean,
-    val tunnel: TunnelData
+    val tunnel: TunnelData,
+    var bypassAppIds: List<String>
 )
 
 class TunnelData(
