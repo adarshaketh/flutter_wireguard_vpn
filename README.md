@@ -67,6 +67,7 @@ void _activateVpn(bool value) async {
         peerPublicKey: initPublicKey,
         privateKey: initPrivateKey,
         peerPresharedKey: presharedKey),
+    bypassAppIds: [] //list of app id's to bypass VPN Tunnel
   ));
   setState(() {
     vpnActivate = results ?? false;
